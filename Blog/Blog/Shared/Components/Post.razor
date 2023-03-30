@@ -1,0 +1,53 @@
+﻿<div class="post-preview">
+    <a href="@Url">
+        <h2 class="post-title">@Title</h2>
+        <h3 class="post-subtitle">@Description</h3>
+    </a>
+    <p class="post-meta">
+        Gepostet von
+        <a href="@AuthorUrl">@Author</a>
+        am @(Date.Day). @Month() @Date.Year
+    </p>
+</div>
+
+<hr class="my-4">
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; } = "This is the title!";
+
+    [Parameter]
+    public string Url { get; set; } = "";
+
+    [Parameter]
+    public string Description { get; set; } = "This is the description!";
+
+    [Parameter]
+    public string Author { get; set; } = "Daniel Balk";
+
+    [Parameter]
+    public string AuthorUrl { get; set; } = "";
+
+    [Parameter]
+    public DateTime Date { get; set; } = new DateTime(2021,9,6);
+
+    private string Month()
+    {
+        return Date.Month switch
+        {
+            1 => "Januar",
+            2 => "Februar",
+            3 => "März<",
+            4 => "April",
+            5 => "Mai",
+            6 => "Juni",
+            7 => "Juli",
+            8 => "August",
+            9 => "September",
+            10 => "Oktober",
+            11 => "November",
+            12 => "Dezember",
+        };
+    }
+}
