@@ -43,6 +43,8 @@ public class RootStorageAccessorService
 
     public bool Exists(string fileName)
     {
-        return File.Exists(GetFullPath(fileName));
+        var path = GetFullPath(fileName);
+        var exits = File.Exists(path);
+        return exits;
     }
 }

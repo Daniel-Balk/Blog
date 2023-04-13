@@ -16,6 +16,7 @@ public class Channel : ChannelMetaModel
 
     public Post[] GetPosts()
     {
-        return PostAccessService.GetAllPosts().Where(x => x.CategoryId == Id).ToArray();
+        var posts = PostAccessService.GetAllPosts();
+        return posts.Where(x => x.CategoryId == Id).ToArray();
     }
 }

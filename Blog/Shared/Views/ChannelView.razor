@@ -1,0 +1,49 @@
+﻿@page "/{Id}"
+
+@using Blog.App.Content.Models
+@using Blog.App.Content.Services
+
+@inject ChannelAccessService ChannelAccessService
+
+@if (Channel != null)
+{
+    <HeadContent>
+        <meta name="description" content="@Channel.Description"/>
+        <meta name="title" content="@Channel.Name"/>
+        <title>@Channel.Name</title>
+    </HeadContent>
+
+    <Header ImagePath="@Channel.ImagePath" Heading="@Channel.Name" Subheading="@Channel.Description"></Header>
+
+    <ContentPage>
+        @foreach (var post in Channel.GetPosts())
+        {
+            <Post Author="@post.GetAuthor().Name" 
+                  Description="@post.Description"
+                  Title="@post.Title"
+                  AuthorUrl="@($"/author/{post.Author}/")"
+                  Url="@($"/{Id}/{post.Id}/")"
+                  Date="@post.Date"/>
+        }
+    </ContentPage>
+}
+else
+{
+    <Header ImagePath="assets/img/codebg.png" Heading="404" Subheading="Diese Seite konnte nicht gefunden werden."></Header>
+    <ContentPage>
+        <br />
+    </ContentPage>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Channel? Channel { get; set; } = null;
+
+    protected override void OnInitialized()
+    {
+        Channel = ChannelAccessService.GetAllChannels().FirstOrDefault(x => x.Id == Id);
+        base.OnInitialized();
+    }
+}

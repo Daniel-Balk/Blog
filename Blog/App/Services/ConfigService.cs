@@ -53,7 +53,7 @@ public class ConfigService
     {
         return 
 #if DEBUG
-        "../../../blogConfig.yml"
+        "../../blogConfig.yml"
 #else
         "config.yml"
 #endif

@@ -9,7 +9,7 @@ public class AuthorAccessService
 {
     private readonly RootStorageAccessorService RootStorageAccessorService;
 
-    private List<Author>? Authors = null;
+    private static List<Author>? Authors = null;
     
     public AuthorAccessService(RootStorageAccessorService rootStorageAccessorService)
     {
