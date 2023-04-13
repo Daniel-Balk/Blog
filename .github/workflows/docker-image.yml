@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: cd blog
+      - run: cd Blog
       - run: echo "🔨 Building Image"
       - name: Build Image
         uses: actions/checkout@v3
