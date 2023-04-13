@@ -1,3 +1,4 @@
+using Blog.App.Content.Services;
 using Blog.App.Database;
 using Blog.App.Repositories;
 using Blog.App.Services;
@@ -24,6 +25,9 @@ services.AddScoped<RootStorageAccessorService>();
 services.AddScoped<CookieService>();
 services.AddScoped<IdentityService>();
 services.AddScoped<UserService>();
+services.AddScoped<AuthorAccessService>();
+services.AddScoped<ChannelAccessService>();
+services.AddScoped<PostAccessService>();
 
 var app = builder.Build();
 
