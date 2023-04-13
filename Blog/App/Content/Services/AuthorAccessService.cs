@@ -32,20 +32,20 @@ public class AuthorAccessService
 
         foreach (var file in metaFilesInRoot)
         {
-                string configuration = RootStorageAccessorService.ReadAllText(file);
+            string configuration = RootStorageAccessorService.ReadAllText(file);
 
-                var meta = YmlConvert.Deserialize<AuthorMetaModel>(configuration);
-                var titleImageUrl = "/resources/" + meta.Id + ".png";
+            var meta = YmlConvert.Deserialize<AuthorMetaModel>(configuration);
+            var titleImageUrl = "/resources/" + meta.Id + ".png";
 
-                var author = new Author()
-                {
-                    Description = meta.Description,
-                    Id = meta.Id,
-                    ImagePath = titleImageUrl,
-                    Name = meta.Name
-                };
-                
-                Authors.Add(author);
+            var author = new Author()
+            {
+                Description = meta.Description,
+                Id = meta.Id,
+                ImagePath = titleImageUrl,
+                Name = meta.Name
+            };
+
+            Authors.Add(author);
         }
 
         return Authors.ToArray();
