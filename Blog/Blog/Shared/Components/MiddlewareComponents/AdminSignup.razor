@@ -1,0 +1,56 @@
+﻿@using Blog.App.Models.Forms
+@using Blog.App.Repositories
+@using Blog.App.Services
+@using Blog.App.Services.Sessions
+@using Blog.Shared.Components.Forms
+
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@inject CookieService CookieService
+@inject UserRepository UserRepository
+
+<Header ImagePath="assets/img/codebg.png" Heading="Daniel's Blog" Subheading="Hier schreibt Daniel über alles, was ihn bewegt"></Header>
+
+<ContentPage>
+    <h1>Create admin account</h1>
+    <SmartForm Model="User" OnValidSubmit="OnValidSubmit">
+        <div class="form-floating">
+            <InputText id="fc1" @bind-Value="User.FullName" class="form-control mb-2" placeholder="Name" type="text"></InputText>
+            <label for="fc1">Name</label>
+        </div>
+        <div class="form-floating">
+            <InputText id="fc2" @bind-Value="User.Email" class="form-control mb-2" placeholder="Email" type="email"></InputText>
+            <label for="fc2">Email</label>
+        </div>
+        <div class="form-floating">
+            <InputText id="fc3" @bind-Value="User.Username" class="form-control mb-2" placeholder="Benutzername" type="text"></InputText>
+            <label for="fc3">Benutzername</label>
+        </div>
+        <div class="form-floating">
+            <InputText id="fc4" @bind-Value="User.Password" class="form-control" placeholder="Passwort" type="password"></InputText>
+            <label for="fc4">Passwort</label>
+        </div>
+        
+        <br />
+        <button class="btn btn-primary text-uppercase" type="submit">Registrieren</button>
+    </SmartForm>
+</ContentPage>
+
+@code {
+    private UserRegisterFormModel User = new();
+
+    private async Task OnValidSubmit()
+    {
+        var result = await UserService.Register(User.Email, User.Password, User.FullName, User.Username);
+        var token = result.Item1;
+        await CookieService.SetValue("token", token, 10);
+
+        var user = result.Item2;
+        user.IsAdmin = true;
+        user.IsSuperAdmin = true;
+        
+        UserRepository.Update(user);
+        
+        NavigationManager.NavigateTo("/", true);
+    }
+}

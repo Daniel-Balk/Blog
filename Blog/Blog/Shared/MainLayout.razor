@@ -1,7 +1,23 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blog.App.Repositories
+@using Blog.Shared.Components.MiddlewareComponents
+@inherits LayoutComponentBase
+
+@inject UserRepository UserRepository
 
 <Navigation />
 
-@Body
+@if (UserRepository.Get().Count() == 0)
+{
+    <AdminSignup />
+}
+else
+{
+    @Body
+}
 
-<Footer />
+<Footer></Footer>
+
+@code
+{
+    
+}

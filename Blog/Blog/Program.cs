@@ -1,13 +1,29 @@
-using Blog.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Blog.App.Database;
+using Blog.App.Repositories;
+using Blog.App.Services;
+using Blog.App.Services.Sessions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddHttpContextAccessor();
+
+var services = builder.Services;
+
+// Database
+services.AddScoped<DataContext>();
+
+// Repositories
+services.AddScoped<UserRepository>();
+
+// Services
+services.AddScoped<ConfigService>();
+services.AddScoped<RootStorageAccessorService>();
+services.AddScoped<CookieService>();
+services.AddScoped<IdentityService>();
+services.AddScoped<UserService>();
 
 var app = builder.Build();
 
