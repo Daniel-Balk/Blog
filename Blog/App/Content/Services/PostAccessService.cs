@@ -10,7 +10,7 @@ public class PostAccessService
     private readonly RootStorageAccessorService RootStorageAccessorService;
     private readonly AuthorAccessService AuthorAccessService;
 
-    private List<Post>? Posts = null;
+    private static List<Post>? Posts = null;
     
     public PostAccessService(RootStorageAccessorService rootStorageAccessorService, AuthorAccessService authorAccessService)
     {
@@ -41,7 +41,7 @@ public class PostAccessService
                 var categoryId = directory.Replace("\\", "/").Split('/', StringSplitOptions.RemoveEmptyEntries).Last();
                 foreach (var dir in dirs)
                 {
-                    var postConfigLocation = directory.TrimEnd('/').TrimEnd('\\') + "/article.meta";
+                    var postConfigLocation = dir.TrimEnd('/').TrimEnd('\\') + "/article.meta";
                     if (RootStorageAccessorService.Exists(postConfigLocation))
                     {
                         string configuration = RootStorageAccessorService.ReadAllText(postConfigLocation);
@@ -58,7 +58,8 @@ public class PostAccessService
                             ImagePath = titleImageUrl,
                             Title = meta.Title,
                             MarkdownFileLocation = dir.TrimEnd('\\').TrimEnd('/') + "/index.md",
-                            CategoryId = categoryId
+                            CategoryId = categoryId,
+                            Date = meta.Date
                         };
 
                         Posts.Add(post);

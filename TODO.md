@@ -1,4 +1,7 @@
 - [ ] Login/Register
+- [ ] Commenting (+also anonymous)
 - [ ] OnlyAdmin Component
 - [ ] Admin: Flush Caches
 - [ ] /resources Handler (only allow file types specified in config; use path in resource/ without modification)
+- [ ] Article View
+- [ ] Author View (/author/\<id\>)

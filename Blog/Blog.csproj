@@ -28,7 +28,22 @@
 
   <ItemGroup>
     <Folder Include="App\Database\Migrations\" />
-    <Folder Include="resource\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="resource\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="resource\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="resource\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="resource\**" />
   </ItemGroup>
 
 </Project>

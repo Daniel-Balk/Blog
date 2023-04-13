@@ -10,7 +10,7 @@ public class ChannelAccessService
     private readonly RootStorageAccessorService RootStorageAccessorService;
     private readonly PostAccessService PostAccessService;
 
-    private List<Channel>? Channels = null;
+    private static List<Channel>? Channels = null;
     
     public ChannelAccessService(RootStorageAccessorService rootStorageAccessorService, PostAccessService postAccessService)
     {
