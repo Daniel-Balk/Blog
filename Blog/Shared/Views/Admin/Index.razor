@@ -1,13 +1,22 @@
 ﻿@page "/admin"
+@using Blog.App.Services
+
+@inject CacheFlushService CacheFlushService
+
 <OnlyAdmin>
     <Header ImagePath="assets/img/codebg.png" Heading="Admin" Subheading="Hier gibt's alles, was Admins so mögen"></Header>
     
     <ContentPage>
-        <p>a</p>
+        <h1>Cache</h1>
+        <button class="btn btn-danger text-uppercase" @onclick="FlushCaches">Cache leeren</button>
     </ContentPage>
 </OnlyAdmin>
 
 
 @code {
-    
+
+    public async Task FlushCaches()
+    {
+        CacheFlushService.Flush();
+    }
 }
