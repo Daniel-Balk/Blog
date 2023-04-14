@@ -1,22 +1,93 @@
 ﻿@page "/admin"
 @using Blog.App.Services
+@using Blog.App.Repositories
+@using Blog.App.Database.Entities
+@using Blog.App.Services.Sessions
 
 @inject CacheFlushService CacheFlushService
+@inject UserRepository UserRepository
+@inject IdentityService IdentityService
 
 <OnlyAdmin>
+    <PageTitle>Admin</PageTitle>
     <Header ImagePath="assets/img/codebg.png" Heading="Admin" Subheading="Hier gibt's alles, was Admins so mögen"></Header>
-    
+
     <ContentPage>
         <h1>Cache</h1>
         <button class="btn btn-danger text-uppercase" @onclick="FlushCaches">Cache leeren</button>
+        <br/>
+        <br/>
+        <h1>Aktive Accounts</h1>
+        <table class="table w-100 table-sm">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Benutzername</th>
+                <OnlySuperAdmin>
+                    <th scope="col"></th>
+                </OnlySuperAdmin>
+            </tr>
+            </thead>
+            @foreach (var user in UserRepository.Get().ToArray())
+            {
+                <tr>
+                    <th scope="row">@user.Id</th>
+                    <td>
+                        @user.FullName
+                    </td>
+                    <td>
+                        @user.Email
+                    </td>
+                    <td>
+                        @user.Username
+                    </td>
+                    <OnlySuperAdmin>
+                        <td>
+                            @if (user != User)
+                            {
+                                @if (user.IsAdmin | user.IsSuperAdmin)
+                                {
+                                    <button class="btn btn-outline-warning text-uppercase" @onclick="() => ToggleAdmin(user)">Admin entfernen</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-outline-danger text-uppercase" @onclick="() => ToggleAdmin(user)">Zu Admin machen</button>
+                                }
+
+                                <button class="btn btn-outline-danger text-uppercase" @onclick="() => DeleteUser(user)">Löschen</button>
+                            }
+                        </td>
+                    </OnlySuperAdmin>
+                </tr>
+            }
+        </table>
     </ContentPage>
 </OnlyAdmin>
 
 
 @code {
+    private User User;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        User = await IdentityService.Get();
+    }
 
     public async Task FlushCaches()
     {
         CacheFlushService.Flush();
+    }
+
+    public async Task ToggleAdmin(User user)
+    {
+        user.IsAdmin = !user.IsAdmin;
+        UserRepository.Update(user);
+    }
+
+    public async Task DeleteUser(User user)
+    {
+        UserRepository.Remove(user);
     }
 }
