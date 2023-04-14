@@ -48,7 +48,7 @@ else
         Channel = ChannelAccessService.GetAllChannels().FirstOrDefault(x => x.Id == Id);
         if (Channel != null)
         {
-            Posts = Channel.GetPosts();
+            Posts = Channel.GetPosts().ToList();
         }
         base.OnInitialized();
     }
