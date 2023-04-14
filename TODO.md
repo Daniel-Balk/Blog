@@ -1,3 +1,2 @@
-- [ ] Commenting (+also anonymous)
-- [ ] Index: Latest posts (Limit 25)
 - [ ] Vote for logged in users
+- [ ] Sitemap (auto-generated)

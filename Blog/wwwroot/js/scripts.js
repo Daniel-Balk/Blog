@@ -27,3 +27,18 @@ window.addEventListener('DOMContentLoaded', () => {
         scrollPos = currentTop;
     });
 })
+
+function showObj(id) {
+    var el = document.querySelector("#" + id)
+    el.className = el.className.replace("hide", "")
+}
+
+function hideObj(id) {
+    var el = document.querySelector("#" + id)
+    el.className += "hide"
+}
+
+function textObj(id, text) {
+    var el = document.querySelector("#" + id)
+    el.innerHTML = text
+}
