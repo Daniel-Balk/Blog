@@ -34,7 +34,7 @@
     </header>
     
     <ContentPage>
-        @Post.GetHypertext()
+        @Hypertext
         <br/>
         
         <h3>Von <a href="@($"/author/{Author.Id}")">@Author.Name</a></h3>
@@ -66,6 +66,8 @@ else
     private Channel? Channel = null;
     private Author? Author = null;
 
+    private MarkupString Hypertext;
+
     protected override void OnInitialized()
     {
         Channel = ChannelAccessService.GetAllChannels().FirstOrDefault(x => x.Id == ChannelId);
@@ -73,6 +75,7 @@ else
         {
             Post = Channel.GetPosts().FirstOrDefault(x => x.Id == PostId);
             Author = Post.GetAuthor();
+            Hypertext = Post.GetHypertext();
         }
         base.OnInitialized();
     }
@@ -82,7 +85,7 @@ else
     {
         if (firstRender)
         {
-            JsRuntime.InvokeVoidAsync("Prism.highlightAll");
+            await JsRuntime.InvokeVoidAsync("Prism.highlightAll");
         }
     }
 }
