@@ -31,7 +31,20 @@
 
     protected override void OnInitialized()
     {
-        Posts = PostAccessService.GetAllPosts().OrderByDescending(x => DateTime.Parse(x.Date)).ToList();
+        Posts = PostAccessService.GetAllPosts().OrderByDescending(x => DateTime.Parse(x.Date
+            .Replace("Januar","January")
+            .Replace("Februar","February")
+            .Replace("März","March")
+            .Replace("April","April")
+            .Replace("Mai","May")
+            .Replace("Juni","June")
+            .Replace("Juli","July")
+            .Replace("August","August")
+            .Replace("September","September")
+            .Replace("Oktober","October")
+            .Replace("November","November")
+            .Replace("Dezember","December")
+        )).ToList();
 
         while (Posts.Count > 25)
         {
