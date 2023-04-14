@@ -59,4 +59,9 @@ public class ConfigService
 #endif
             ;
     }
+
+    public void Flush()
+    {
+        _config = null;
+    }
 }

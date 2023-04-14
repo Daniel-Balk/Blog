@@ -24,10 +24,11 @@ public class UserService
     public async Task<(string, User)> Register(string email, string password, string fullName, string username)
     {
         var emailTaken = UserRepository.Get().FirstOrDefault(x => x.Email == email) != null;
+        var usernameTaken = UserRepository.Get().FirstOrDefault(x => x.Username == username) != null;
 
-        if (emailTaken)
+        if (emailTaken | usernameTaken)
         {
-            throw new Exception("The email is already in use");
+            throw new Exception("The email/username is already in use");
         }
         
         var user = UserRepository.Add(new()

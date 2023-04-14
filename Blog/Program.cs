@@ -28,6 +28,7 @@ services.AddScoped<UserService>();
 services.AddScoped<AuthorAccessService>();
 services.AddScoped<ChannelAccessService>();
 services.AddScoped<PostAccessService>();
+services.AddScoped<CacheFlushService>();
 
 var app = builder.Build();
 
@@ -43,6 +44,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.MapBlazorHub();
+app.MapControllers();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
