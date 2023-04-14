@@ -2,7 +2,6 @@
 @using Blog.App.Services
 @using Blog.App.Content.Services
 
-@inject ConfigService ConfigService
 @inject PostAccessService PostAccessService
 
 <HeadContent>
@@ -27,7 +26,7 @@
 </ContentPage>
 
 @code{
-    private List<App.Content.Models.Post> Posts;
+    private List<App.Content.Models.Post> Posts = new List<App.Content.Models.Post>();
 
     protected override void OnInitialized()
     {
@@ -51,5 +50,4 @@
             Posts.RemoveAt(25);
         }
     }
-
 }

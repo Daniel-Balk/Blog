@@ -5,6 +5,7 @@
 @using Post = Blog.App.Content.Models.Post
 
 @inject ChannelAccessService ChannelAccessService
+@inject NavigationManager NavigationManager
 
 @if (Channel != null)
 {
@@ -41,15 +42,21 @@ else
     public string Id { get; set; }
 
     private Channel? Channel { get; set; } = null;
-    private List<Post> Posts;
+    private List<Post> Posts = new List<Post>();
 
     protected override void OnInitialized()
+    {
+        LoadData();
+        NavigationManager.LocationChanged += (s, e) => LoadData();
+        base.OnInitialized();
+    }
+
+    private void LoadData()
     {
         Channel = ChannelAccessService.GetAllChannels().FirstOrDefault(x => x.Id == Id);
         if (Channel != null)
         {
             Posts = Channel.GetPosts().ToList();
         }
-        base.OnInitialized();
     }
 }
