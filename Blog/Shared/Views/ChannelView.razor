@@ -2,6 +2,7 @@
 
 @using Blog.App.Content.Models
 @using Blog.App.Content.Services
+@using Post = Blog.App.Content.Models.Post
 
 @inject ChannelAccessService ChannelAccessService
 
@@ -16,7 +17,7 @@
     <Header ImagePath="@Channel.ImagePath" Heading="@Channel.Name" Subheading="@Channel.Description"></Header>
 
     <ContentPage>
-        @foreach (var post in Channel.GetPosts())
+        @foreach (var post in Posts)
         {
             <Post Author="@post.GetAuthor().Name" 
                   Description="@post.Description"
@@ -40,10 +41,15 @@ else
     public string Id { get; set; }
 
     private Channel? Channel { get; set; } = null;
+    private List<Post> Posts;
 
     protected override void OnInitialized()
     {
         Channel = ChannelAccessService.GetAllChannels().FirstOrDefault(x => x.Id == Id);
+        if (Channel != null)
+        {
+            Posts = Channel.GetPosts();
+        }
         base.OnInitialized();
     }
 }
