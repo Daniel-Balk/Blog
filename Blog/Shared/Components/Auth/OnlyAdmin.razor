@@ -5,7 +5,7 @@
 
 @if (User != null)
 {
-    @if (User.IsAdmin)
+    @if (User.IsAdmin | User.IsSuperAdmin)
     {
         @ChildContent
     }

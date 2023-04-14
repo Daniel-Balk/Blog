@@ -1,0 +1,117 @@
+﻿@page "/me"
+
+@using Blog.App.Database.Entities
+@using Blog.App.Models.Forms
+@using Blog.App.Services
+@using Blog.App.Services.Sessions
+@using Blog.Shared.Components.Forms
+
+@inject IdentityService IdentityService
+@inject UserService UserService
+@inject CookieService CookieService
+@inject NavigationManager NavigationManager
+
+@if (User != null)
+{
+    <HeadContent>
+        <meta name="description" content="Accountverwaltung"/>
+        <PageTitle>Mein Account</PageTitle>
+    </HeadContent>
+
+    <Header ImagePath="assets/img/codebg.png" Heading="Mein Account" Subheading="Hier kanst du deinen Account verwalten"></Header>
+
+    <ContentPage>
+        <h1>Meine Daten</h1>
+        <div class="form-floating">
+            <input id="fc1" value="@User.FullName" class="form-control mb-2" placeholder="Name" type="text" readonly="readonly"/>
+            <label for="fc1">Name</label>
+        </div>
+        <div class="form-floating">
+            <input id="fc2" value="@User.Email" class="form-control mb-2" placeholder="Email" type="email" readonly="readonly"/>
+            <label for="fc2">Email</label>
+        </div>
+        <div class="form-floating">
+            <input id="fc3" value="@User.Username" class="form-control mb-2" placeholder="Benutzername" type="text" readonly="readonly"/>
+            <label for="fc3">Benutzername</label>
+        </div>
+        <br />
+        <h1>Abmelden</h1>
+        <button class="btn btn-danger text-uppercase" @onclick="Logout">Abmelden</button>
+    </ContentPage>
+
+}
+else
+{
+    <PageTitle>Anmelden</PageTitle>
+    
+    <Header ImagePath="assets/img/codebg.png" Heading="Anmelden" Subheading="Melde dich hier im an"></Header>
+
+    <ContentPage>
+        <h1>Anmelden</h1>
+        <SmartForm Model="Login" OnValidSubmit="DoLogin">
+            <div class="form-floating">
+                <InputText id="fc2" @bind-Value="Login.Email" class="form-control mb-2" placeholder="Email" type="email"></InputText>
+                <label for="fc2">Email</label>
+            </div>
+            <div class="form-floating">
+                <InputText id="fc4" @bind-Value="Login.Password" class="form-control" placeholder="Passwort" type="password"></InputText>
+                <label for="fc4">Passwort</label>
+            </div>
+            
+            <div>
+                <a class="text-center">Noch kein Account? <a href="/register">Hier registrieren</a></a>
+            </div>
+            <br/>
+            <button class="btn btn-primary text-uppercase" type="submit">Anmelden</button>
+        </SmartForm>
+        @if (IsErrored)
+        {
+            <br />
+            <div class="alert alert-danger">
+                @LoginError
+            </div>
+        }
+    </ContentPage>
+}
+
+@code {
+    private User? User = null;
+
+    private LoginFormModel Login = new();
+
+    private string LoginError = "";
+    private bool IsErrored = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await IdentityService.Get();
+    }
+
+    public async Task Logout()
+    {
+        await CookieService.SetValue("token", "", 1);
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+
+    public async Task DoLogin()
+    {
+        try
+        {
+            LoginError = "";
+            IsErrored = false;
+            StateHasChanged();
+
+            Login.Email = Login.Email.ToLower().Trim();
+            var token = await UserService.Login(Login.Email, Login.Password);
+            await CookieService.SetValue("token", token, 31);
+
+            NavigationManager.NavigateTo(NavigationManager.Uri, true);
+        }
+        catch (Exception e)
+        {
+            IsErrored = true;
+            LoginError = e.Message;
+            StateHasChanged();
+        }
+    }
+}
