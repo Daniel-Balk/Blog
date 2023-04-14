@@ -7,5 +7,6 @@
 - [ ] Channels as Navigation
 - [ ] Index: Latest posts (Limit 25)
 - [ ] Vote for logged in users
+- [ ] /me (User Overview + Logout Option | Login)
 - [ ] Admin Pages:
   - [ ] Users Managing
