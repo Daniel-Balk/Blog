@@ -1,3 +1,3 @@
-- [ ] Commenting (+also anonymous)
+- [ ] Commenting (+also anonymous; IP Grabber)
 - [ ] Index: Latest posts (Limit 25)
 - [ ] Vote for logged in users
