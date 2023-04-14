@@ -8,4 +8,5 @@ public class PostMetaModel
     public string Description { get; set; } = "";
     public string Author { get; set; } = "";
     public string Date { get; set; } = "";
+    public string Subheading { get; set; } = "";
 }
