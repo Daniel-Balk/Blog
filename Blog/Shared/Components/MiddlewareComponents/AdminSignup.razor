@@ -12,7 +12,7 @@
 <Header ImagePath="assets/img/codebg.png" Heading="Daniel's Blog" Subheading="Hier schreibt Daniel über alles, was ihn bewegt"></Header>
 
 <ContentPage>
-    <h1>Create admin account</h1>
+    <h1>Admin Account erstellen</h1>
     <SmartForm Model="User" OnValidSubmit="OnValidSubmit">
         <div class="form-floating">
             <InputText id="fc1" @bind-Value="User.FullName" class="form-control mb-2" placeholder="Name" type="text"></InputText>
@@ -43,7 +43,7 @@
     {
         var result = await UserService.Register(User.Email, User.Password, User.FullName, User.Username);
         var token = result.Item1;
-        await CookieService.SetValue("token", token, 10);
+        await CookieService.SetValue("token", token, 31);
 
         var user = result.Item2;
         user.IsAdmin = true;
