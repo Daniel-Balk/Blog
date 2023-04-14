@@ -1,1 +1,2 @@
+- [ ] Vote for logged in users
 - [ ] Sitemap (auto-generated)
