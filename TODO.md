@@ -1,12 +1,6 @@
-- [ ] Login/Register
 - [ ] Commenting (+also anonymous)
-- [ ] Only(Super)Admin Component
-- [ ] Admin: Flush Caches
-- [ ] Article View
-- [ ] Author View (/author/\<id\>)
-- [ ] Channels as Navigation
 - [ ] Index: Latest posts (Limit 25)
 - [ ] Vote for logged in users
-- [ ] /me (User Overview + Logout Option | Login)
 - [ ] Admin Pages:
   - [ ] Users Managing
+  - [ ] Flush Caches

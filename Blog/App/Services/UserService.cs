@@ -43,8 +43,27 @@ public class UserService
         
         return (await GenerateToken(user), user);
     }
+    
+    public async Task<bool> CheckAccount(string email, string password)
+    {
+        var user = UserRepository.Get()
+            .FirstOrDefault(
+                x => x.Email == email
+            );
 
-    public async Task<string> Login(string email, string password, string totpCode = "")
+        if (user == null)
+        {
+            throw new Exception("Email and password combination not found");
+        }
+
+        if (BCrypt.Net.BCrypt.Verify(password, user.Password))
+        {
+            return true;
+        }
+
+        throw new Exception("Email and password combination not found");;
+    }
+    public async Task<string> Login(string email, string password)
     {
         var user = UserRepository.Get()
             .FirstOrDefault(
@@ -52,8 +71,10 @@ public class UserService
                     email
                 )
             );
-
-        return await GenerateToken(user!, true);
+        
+        if(await CheckAccount(email, password))
+            return await GenerateToken(user!, true);
+        throw new Exception();
     }
 
     public async Task ChangePassword(User user, string password, bool isSystemAction = false)

@@ -1,0 +1,96 @@
+﻿@page "/register"
+
+@using Blog.App.Database.Entities
+@using Blog.App.Models.Forms
+@using Blog.App.Services
+@using Blog.App.Services.Sessions
+@using Blog.Shared.Components.Forms
+
+@inject IdentityService IdentityService
+@inject UserService UserService
+@inject CookieService CookieService
+@inject NavigationManager NavigationManager
+
+@if (User != null)
+{
+    <Header ImagePath="assets/img/codebg.png" Heading="404" Subheading="Diese Seite konnte nicht gefunden werden."></Header>
+    <ContentPage>
+        <br />
+    </ContentPage>
+}
+else
+{
+    <PageTitle>Registrieren</PageTitle>
+    
+    <Header ImagePath="assets/img/codebg.png" Heading="Registrieren" Subheading="Erstelle hier deinen Account"></Header>
+
+    <ContentPage>
+        <h1>Registrieren</h1>
+        <SmartForm Model="Register" OnValidSubmit="DoRegister">
+            <div class="form-floating">
+                <InputText id="fc1" @bind-Value="Register.FullName" class="form-control mb-2" placeholder="Name" type="text"></InputText>
+                <label for="fc1">Name</label>
+            </div>
+            <div class="form-floating">
+                <InputText id="fc2" @bind-Value="Register.Email" class="form-control mb-2" placeholder="Email" type="email"></InputText>
+                <label for="fc2">Email</label>
+            </div>
+            <div class="form-floating">
+                <InputText id="fc3" @bind-Value="Register.Username" class="form-control mb-2" placeholder="Benutzername" type="text"></InputText>
+                <label for="fc3">Benutzername</label>
+            </div>
+            <div class="form-floating">
+                <InputText id="fc4" @bind-Value="Register.Password" class="form-control" placeholder="Passwort" type="password"></InputText>
+                <label for="fc4">Passwort</label>
+            </div>
+            
+            <div>
+                <a class="text-center">Bereits einen Account? <a href="/me">Hier anmelden</a></a>
+            </div>
+            <br />
+            <button class="btn btn-primary text-uppercase" type="submit">Registrieren</button>
+        </SmartForm>
+        @if (IsErrored)
+        {
+            <br />
+            <div class="alert alert-danger">
+                @RegisterError
+            </div>
+        }
+    </ContentPage>
+}
+
+@code {
+    private User? User = null;
+
+    private UserRegisterFormModel Register = new();
+
+    private string RegisterError = "";
+    private bool IsErrored = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await IdentityService.Get();
+    }
+
+    public async Task DoRegister()
+    {
+        try
+        {
+            RegisterError = "";
+            IsErrored = false;
+            StateHasChanged();
+
+            var token = (await UserService.Register(Register.Email, Register.Password, Register.FullName, Register.Username)).Item1;
+            await CookieService.SetValue("token", token, 31);
+        
+            NavigationManager.NavigateTo("/", true);
+        }
+        catch (Exception e)
+        {
+            IsErrored = true;
+            RegisterError = e.Message;
+            StateHasChanged();
+        }
+    }
+}
