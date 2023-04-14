@@ -1,16 +1,42 @@
 ﻿@page "/"
 @using Blog.App.Services
+@using Blog.App.Content.Services
 
 @inject ConfigService ConfigService
+@inject PostAccessService PostAccessService
 
 <HeadContent>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
+    <meta name="description" content="Die neuesten Posts"/>
+    <meta name="author" content="Daniel Balk"/>
+    <PageTitle>Home</PageTitle>
 </HeadContent>
 
 <Header ImagePath="assets/img/codebg.png" Heading="Daniel's Blog" Subheading="Hier schreibt Daniel über alles, was ihn bewegt"></Header>
 
 <ContentPage>
-    <p>Hello, World!</p>
-    <Post></Post>
+    <h1>Neuste Artikel</h1>
+    @foreach (var post in Posts)
+    {
+        <Post Author="@post.GetAuthor().Name"
+              Description="@post.Description"
+              Title="@post.Title"
+              AuthorUrl="@($"/author/{post.Author}/")"
+              Url="@($"/{post.CategoryId}/{post.Id}/")"
+              Date="@post.Date"/>
+    }
 </ContentPage>
+
+@code{
+    private List<App.Content.Models.Post> Posts;
+
+    protected override void OnInitialized()
+    {
+        Posts = PostAccessService.GetAllPosts().OrderByDescending(x => DateTime.Parse(x.Date)).ToList();
+
+        while (Posts.Count > 25)
+        {
+            Posts.RemoveAt(25);
+        }
+    }
+
+}
