@@ -1,6 +1,5 @@
 - [ ] Login/Register
 - [ ] Commenting (+also anonymous)
-- [ ] Only(Super)Admin Component
 - [ ] Admin: Flush Caches
 - [ ] Article View
 - [ ] Author View (/author/\<id\>)
