@@ -59,7 +59,8 @@ public class PostAccessService
                             Title = meta.Title,
                             MarkdownFileLocation = dir.TrimEnd('\\').TrimEnd('/') + "/index.md",
                             CategoryId = categoryId,
-                            Date = meta.Date
+                            Date = meta.Date,
+                            Subheading = meta.Subheading
                         };
 
                         Posts.Add(post);

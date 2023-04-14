@@ -31,7 +31,6 @@ public class MarkdownReworker
             .UseMathematics()
             .UseEmojiAndSmiley()
             .UseBootstrap()
-            .UseDiagrams()
             .Build();
         var result = Markdown.ToHtml(markdown, pipeline);
 

@@ -1,0 +1,87 @@
+﻿@page "/{ChannelId}/{*PostId}"
+
+@using Blog.App.Content.Models
+@using Blog.App.Content.Services
+@using Post = Blog.App.Content.Models.Post
+
+@inject ChannelAccessService ChannelAccessService
+@inject IJSRuntime JsRuntime
+
+@if (Post != null)
+{
+    <HeadContent>
+        <meta name="description" content="@Post.Description"/>
+        <meta name="author" content="@Post.Author"/>
+        <PageTitle>@Post.Title</PageTitle>
+    </HeadContent>
+    
+    <header class="masthead" style="background-image: url('@Post.ImagePath')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="post-heading">
+                        <h1>@Post.Title</h1>
+                        <h2 class="subheading">@Post.Subheading</h2>
+                        <span class="meta">
+                            Gepostet von 
+                            <a href="@($"/author/{Author.Id}")">@Author.Name</a>
+                            am @Post.Date
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <ContentPage>
+        @Post.GetHypertext()
+        <br/>
+        
+        <table style="table-layout: fixed" class="w-100">
+            <tr>
+                <td class="w-25 align-top pe-2">
+                    <img src="@Author.ImagePath" class="align-top rounded-circle w-100"/>
+                </td>
+                <td class="w-75 align-top mt-0">
+                    <p class="mt-0">@Author.Description</p>
+                </td>
+            </tr>
+        </table>
+    </ContentPage>
+}
+else
+{
+    <Header ImagePath="assets/img/codebg.png" Heading="404" Subheading="Diese Seite konnte nicht gefunden werden."></Header>
+    <ContentPage>
+        <br />
+    </ContentPage>
+}
+
+@code {
+    [Parameter] public string ChannelId { get; set; }
+    [Parameter] public string PostId { get; set; }
+
+    private Post? Post = null;
+    private Channel? Channel = null;
+    private Author? Author = null;
+
+    protected override void OnInitialized()
+    {
+        Channel = ChannelAccessService.GetAllChannels().FirstOrDefault(x => x.Id == ChannelId);
+        if (Channel != null)
+        {
+            Post = Channel.GetPosts().FirstOrDefault(x => x.Id == PostId);
+            Author = Post.GetAuthor();
+        }
+        base.OnInitialized();
+    }
+
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            JsRuntime.InvokeVoidAsync("Prism.highlightAll");
+        }
+    }
+}

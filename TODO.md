@@ -1,8 +1,11 @@
 - [ ] Login/Register
 - [ ] Commenting (+also anonymous)
-- [ ] OnlyAdmin Component
+- [ ] Only(Super)Admin Component
 - [ ] Admin: Flush Caches
-- [ ] /resources Handler (only allow file types specified in config; use path in resource/ without modification)
 - [ ] Article View
 - [ ] Author View (/author/\<id\>)
 - [ ] Channels as Navigation
+- [ ] Index: Latest posts (Limit 25)
+- [ ] Vote for logged in users
+- [ ] Admin Pages:
+  - [ ] Users Managing
