@@ -1,6 +1,3 @@
 - [ ] Commenting (+also anonymous)
 - [ ] Index: Latest posts (Limit 25)
 - [ ] Vote for logged in users
-- [ ] Admin Pages:
-  - [ ] Users Managing
-  - [ ] Flush Caches
