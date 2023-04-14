@@ -3,6 +3,7 @@ using Blog.App.Database;
 using Blog.App.Repositories;
 using Blog.App.Services;
 using Blog.App.Services.Sessions;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +14,15 @@ builder.Services.AddHttpContextAccessor();
 
 var services = builder.Services;
 
+// Http Context Accessor
+services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 // Database
 services.AddScoped<DataContext>();
 
 // Repositories
 services.AddScoped<UserRepository>();
+services.AddScoped<CommentRepository>();
 
 // Services
 services.AddScoped<ConfigService>();
@@ -29,6 +34,8 @@ services.AddScoped<AuthorAccessService>();
 services.AddScoped<ChannelAccessService>();
 services.AddScoped<PostAccessService>();
 services.AddScoped<CacheFlushService>();
+services.AddScoped<CommentOrderService>();
+services.AddScoped<IpTrackingService>();
 
 var app = builder.Build();
 

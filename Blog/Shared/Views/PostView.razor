@@ -2,10 +2,19 @@
 
 @using Blog.App.Content.Models
 @using Blog.App.Content.Services
+@using Blog.App.Database.Entities
+@using Blog.App.Repositories
+@using Blog.App.Services
+@using Blog.App.Services.Sessions
 @using Post = Blog.App.Content.Models.Post
 
 @inject ChannelAccessService ChannelAccessService
 @inject IJSRuntime JsRuntime
+@inject CommentOrderService CommentOrderService
+@inject CommentRepository CommentRepository
+@inject IdentityService IdentityService
+@inject IpTrackingService IpTrackingService
+@inject NavigationManager NavigationManager
 
 @if (Post != null)
 {
@@ -37,7 +46,7 @@
         @Hypertext
         <br/>
         
-        <h3>Von <a href="@($"/author/{Author.Id}")">@Author.Name</a></h3>
+        <h2>Von <a href="@($"/author/{Author.Id}")">@Author.Name</a></h2>
         <table style="table-layout: fixed" class="w-100">
             <tr>
                 <td class="w-25 align-top pe-2">
@@ -48,6 +57,180 @@
                 </td>
             </tr>
         </table>
+        <br />
+        <h2>Kommentare</h2>
+        <textarea id="w-comment" @bind="CommentText" class="form-control" style="height:65px" placeholder="Kommentar..."></textarea>
+        <button class="btn btn-primary text-uppercase float-end mt-2" @onclick="SendComment">Kommentar als @(User == null ? "Anonym" : User.Username) veröffentlichen</button>
+                           				
+        <div>
+	        <div style="height:25px"></div>
+	        @{
+		        int j = 0;
+	        }
+	        
+	        @foreach(var comment in Comments)
+	        {
+		        j++;
+		        var i = j;
+		        
+		        <div style="margin-left: @(comment.Recursion)rem">
+			        <table class="w-100">
+				        <tr>
+					        <td style="background-color: #0084A0; width: 2px;">
+						        <div></div>
+					        </td>
+					        <td class="pt-2">
+						        <table class="w-100 ms-2" style="table-layout: fixed">
+							        <tr>
+								        <td style="width: 50px;">
+									        <img src="@comment.GravatarUrl" class="rounded-circle" style="width: 50px; height: 50px;" />
+								        </td>
+								        <td>
+									        <p style="text-align: left" class="mt-2 mb-2 ms-1">@comment.Author</p>
+								        </td>
+								        <td>
+									        <p style="text-align: right; color: #999;" class="mt-2 mb-2">
+										        @DateSpan(comment.CreatedAt)
+									        </p>
+								        </td>
+							        </tr>
+							        <tr>
+								        <td colspan="3">
+									        <p class="my-2">
+										        @comment.Content
+									        </p>
+								        </td>
+							        </tr>
+							        <OnlyAdmin>
+								        <tr>
+									        <td colspan="3">
+										        <p class="my-0">
+											        IP:
+											        @(string.IsNullOrWhiteSpace(comment.IpAddress) ? "NULL" : comment.IpAddress)
+										        </p>
+									        </td>
+								        </tr>
+							        </OnlyAdmin>
+							        <tr>
+								        <td colspan="3" class="pb-2">
+									        @{
+										        if(!init.ContainsKey(j))
+										        {
+											        showReplyMode[j] = false;
+											        replyContent[j] = "";
+											        toggleButtonText[j] = "Antworten";
+											        init[j] = true;
+										        }
+										        Action toggleReply = async () =>
+										        {
+											        var an = User == null ? "Anonym" : User.Username;
+
+											        if(!showReplyMode[j] && string.IsNullOrWhiteSpace(replyContent[j]))
+											        {
+												        showReplyMode[j] = true;
+												        toggleButtonText[j] = $"Antwort als {an} veröffentlichen";
+											        }
+											        else if(showReplyMode[j] && string.IsNullOrWhiteSpace(replyContent[j]))
+											        {
+												        showReplyMode[j] = false;
+												        toggleButtonText[j] = "Antworten";
+											        }
+											        else if(showReplyMode[j] && !string.IsNullOrWhiteSpace(replyContent[j]))
+											        {
+												        showReplyMode[j] = false;
+												        toggleButtonText[j] = "Antworten";
+												        
+												        var iu = User == null ? "/assets/img/user-anonym.png" : GravatarSharp.GravatarController.GetImageUrl(User.Email, 512);
+												       
+												        var m = new Comment()
+												        {
+													        Author = an,
+													        Content = replyContent[j],
+													        CreatedAt = DateTime.UtcNow,
+													        GravatarUrl = iu,
+													        Article = Post.Id,
+													        Channel = Post.CategoryId,
+													        IsReply = true,
+													        Recursion = comment.Recursion + 1,
+													        ReplyingTo = comment.Id,
+													        IpAddress = IpTrackingService.GetIpAddress()
+												        };
+												        
+												        if (!string.IsNullOrWhiteSpace(replyContent[j]))
+													        CommentRepository.Add(m);
+												        
+												        replyContent[j] = "";
+
+												        Comments = CommentOrderService.GetComments(Post.CategoryId, Post.Id);
+											        
+												        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+											        }
+											        StateHasChanged();
+											        if (showReplyMode[j])
+											        {
+												        await JsRuntime.InvokeVoidAsync("showObj", "at-" + i);
+											        }
+											        else
+											        {
+												        await JsRuntime.InvokeVoidAsync("hideObj", "at-" + i);
+											        }
+											        await JsRuntime.InvokeVoidAsync("textObj", "answer-" + i, toggleButtonText[j]);
+										        };
+									        }
+									        <div id="at-@i" class="hide">
+										        <textarea class="comment-answer form-control w-100" @bind="replyContent[j]" id="tb-answer-@i" style="width:calc(100% - 20px);height:65px" placeholder="Antworten..."></textarea>
+										        <br style="line-height:25px" />
+									        </div>
+									        <button @onclick="toggleReply" id="answer-@i" class="comment-reply-button btn btn-primary text-uppercase">@toggleButtonText[j]</button>
+									        @{
+										        Action deleteComment = () =>
+										        {
+											        CommentRepository.Remove(comment);
+        
+											        Comments = CommentOrderService.GetComments(Post.CategoryId, Post.Id);
+											        
+											        if (Comments == null)
+												        Comments = new();
+											        
+											        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+										        };
+        
+										        Action deleteAllByUser = () =>
+										        {
+											        CommentRepository.Get().Where(x => x.IpAddress == comment.IpAddress).ToList().ForEach(x =>
+											        {
+												        CommentRepository.Remove(x);
+											        });
+        
+											        Comments = CommentOrderService.GetComments(Post.CategoryId, Post.Id);
+											        
+											        if (Comments == null)
+												        Comments = new();
+											        
+											        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+										        };
+									        }
+									        <OnlyAdmin>
+										        <button @onclick="deleteComment" class="btn btn-warning">
+											        Löschen
+										        </button>
+										        
+										        @if(!string.IsNullOrWhiteSpace(comment.IpAddress))
+										        {
+											        <button @onclick="deleteAllByUser" class="btn btn-danger">
+												        Alle Kommentare von Nutzer löschen
+											        </button>
+										        }
+									        </OnlyAdmin>
+								        </td>
+							        </tr>
+						        </table>
+					        </td>
+				        </tr>
+			        </table>
+		        </div>
+	        }
+        </div>
     </ContentPage>
 }
 else
@@ -67,25 +250,82 @@ else
     private Author? Author = null;
 
     private MarkupString Hypertext;
+	private List<Comment> Comments;
+	private User? User;
+
+	private string CommentText = "";
+	
+	private Dictionary<int, bool> init = new();
+	private Dictionary<int, bool> showReplyMode = new();
+	private Dictionary<int, string> replyContent  = new();
+	private Dictionary<int, string> toggleButtonText  = new();
 
     protected override void OnInitialized()
     {
-        Channel = ChannelAccessService.GetAllChannels().FirstOrDefault(x => x.Id == ChannelId);
+	    Channel = ChannelAccessService.GetAllChannels().FirstOrDefault(x => x.Id == ChannelId);
         if (Channel != null)
         {
             Post = Channel.GetPosts().FirstOrDefault(x => x.Id == PostId);
             Author = Post.GetAuthor();
             Hypertext = Post.GetHypertext();
+	        Comments = CommentOrderService.GetComments(Post.CategoryId, Post.Id);
         }
-        base.OnInitialized();
     }
 
+	protected override async Task OnInitializedAsync()
+	{
+		User = await IdentityService.Get();
+	}
 
-    protected async override Task OnAfterRenderAsync(bool firstRender)
+	protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await JsRuntime.InvokeVoidAsync("Prism.highlightAll");
         }
     }
+	
+	public	async Task SendComment()
+	{
+		var an = User == null ? "Anonym" : User.Username;
+		var iu = User == null ? "/assets/img/user-anonym.png" : GravatarSharp.GravatarController.GetImageUrl(User.Email, 512);
+		var m = new Comment()
+		{
+			Author = an,
+			Content = CommentText,
+			CreatedAt = DateTime.UtcNow,
+			GravatarUrl = iu,
+			Article = Post.Id,
+			Channel = Post.CategoryId,
+			IsReply = false,
+			Recursion = 0,
+			ReplyingTo = -1,
+			IpAddress = IpTrackingService.GetIpAddress()
+		};
+		
+		if (!string.IsNullOrWhiteSpace(CommentText))
+			CommentRepository.Add(m);
+		
+		CommentText = "";
+		Comments = CommentOrderService.GetComments(Post.CategoryId, Post.Id);
+		
+		if (Comments == null)
+			Comments = new();
+		
+		StateHasChanged();
+	}
+	
+	string DateSpan(DateTime time)
+	{
+		var sp = DateTime.Now - time;
+		var td = sp.TotalDays - sp.TotalDays % 1;
+		if (td == 0)
+			return "heute";
+		if (td == 1)
+			return "gestern";
+		if (td == 2)
+			return "vorgestern";
+
+		return $"{time.Day}/{time.Month}/{time.Year}";
+	}
 }
