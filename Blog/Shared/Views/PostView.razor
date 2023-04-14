@@ -60,7 +60,7 @@
         <br />
         <h2>Kommentare</h2>
         <textarea id="w-comment" @bind="CommentText" class="form-control" style="height:65px" placeholder="Kommentar..."></textarea>
-        <button class="btn btn-primary text-uppercase float-end mt-2" @onclick="SendComment">Kommentar als @(User == null ? "Anonym" : User.Username) veröffentlichen</button>
+        <button class="btn btn-primary text-uppercase float-end mt-2 mb-4" @onclick="SendComment">Kommentar als @(User == null ? "Anonym" : User.Username) veröffentlichen</button>
                            				
         <div>
 	        <div style="height:25px"></div>
