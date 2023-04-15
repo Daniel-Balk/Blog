@@ -49,7 +49,7 @@
                   Description="@post.Description"
                   Title="@post.Title"
                   AuthorUrl="@($"/author/{post.Author}/")"
-                  Url="@($"/{Id}/{post.Id}/")"
+                  Url="@($"/{post.CategoryId}/{post.Id}/")"
                   Date="@post.Date"/>
         }
     </ContentPage>
@@ -73,9 +73,21 @@ else
         Author = AuthorAccessService.GetAllAuthors().FirstOrDefault(x => x.Id == Id);
         if (Author != null)
         {
-            PostsByAuthor = PostAccessService.GetAllPosts().Where(x => x.Author == Id).ToList();
+            PostsByAuthor = PostAccessService.GetAllPosts().Where(x => x.Author == Id).OrderByDescending(x => DateTime.Parse(x.Date
+                .Replace("Januar", "January")
+                .Replace("Februar", "February")
+                .Replace("März", "March")
+                .Replace("April", "April")
+                .Replace("Mai", "May")
+                .Replace("Juni", "June")
+                .Replace("Juli", "July")
+                .Replace("August", "August")
+                .Replace("September", "September")
+                .Replace("Oktober", "October")
+                .Replace("November", "November")
+                .Replace("Dezember", "December")
+                )).ToList();
         }
         base.OnInitialized();
     }
-
 }
