@@ -29,15 +29,29 @@ public class DynamicSitemap : Microsoft.AspNetCore.Mvc.Controller
         
         var channels = ChannelAccessService.GetAllChannels();
         
-        Add("/", DateTime.Now.ToString());
+        Add("/", DateTime.UtcNow.ToString("yyyy-mm-ddThh:mm:ss+00:00"));
 
         foreach (var channel in channels)
         {
-            Add("/" + channel.Id, DateTime.Now.ToString());
+            Add("/" + channel.Id, DateTime.UtcNow.ToString("yyyy-mm-ddThh:mm:ss+00:00"));
             var posts = channel.GetPosts();
             foreach (var post in posts)
             {
-                Add($"/{channel.Id}/{post.Id}/", post.Date);
+                var date = DateTime.Parse(post.Date
+                    .Replace("Januar", "January")
+                    .Replace("Februar", "February")
+                    .Replace("März", "March")
+                    .Replace("April", "April")
+                    .Replace("Mai", "May")
+                    .Replace("Juni", "June")
+                    .Replace("Juli", "July")
+                    .Replace("August", "August")
+                    .Replace("September", "September")
+                    .Replace("Oktober", "October")
+                    .Replace("November", "November")
+                    .Replace("Dezember", "December")
+                );
+                Add($"/{channel.Id}/{post.Id}/", date.ToUniversalTime().ToString("yyyy-mm-ddThh:mm:ss+00:00"));
             }
         }
 
