@@ -125,7 +125,7 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
             try
             {
                 tcpListener.Start();
-                return new IPEndPoint(IPAddress.Any, listeningPort);
+                return new IPEndPoint(listeningIP, listeningPort);
             }
             catch
             {
@@ -143,7 +143,7 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
             {
                 Console.WriteLine($"Testing {port}");
                 listeningPort = port;
-                var listeningEP = new IPEndPoint(IPAddress.Any, listeningPort);
+                var listeningEP = new IPEndPoint(listeningIP, listeningPort);
                 tcpListener = new TcpListener(listeningEP);
                 tcpListener.Start();
                 lastUsedPort = port;
