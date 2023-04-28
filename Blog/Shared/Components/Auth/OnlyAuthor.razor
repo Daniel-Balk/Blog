@@ -1,0 +1,23 @@
+﻿@using Blog.App.Database.Entities
+@using Blog.App.Services.Sessions
+
+@inject IdentityService IdentityService
+
+@if (User != null)
+{
+    @if (User.IsAuthor | User.IsAdmin | User.IsSuperAdmin)
+    {
+        @ChildContent
+    }
+}
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    
+    private User? User;
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await IdentityService.Get();
+    }
+}

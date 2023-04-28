@@ -8,6 +8,7 @@ public class User
     public string Username { get; set; } = "";
     public string Email { get; set; } = "";
 
+    public bool IsAuthor { get; set; } = false;
     public bool IsAdmin { get; set; } = false;
     public bool IsSuperAdmin { get; set; } = false;
 
