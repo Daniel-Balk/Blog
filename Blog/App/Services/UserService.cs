@@ -63,6 +63,26 @@ public class UserService
 
         throw new Exception("Email and password combination not found");;
     }
+    
+    public bool CheckAccountSync(string email, string password)
+    {
+        var user = UserRepository.Get()
+            .FirstOrDefault(
+                x => x.Email == email
+            );
+
+        if (user == null)
+        {
+            throw new Exception("Email and password combination not found");
+        }
+
+        if (BCrypt.Net.BCrypt.Verify(password, user.Password))
+        {
+            return true;
+        }
+
+        throw new Exception("Email and password combination not found");;
+    }
     public async Task<string> Login(string email, string password)
     {
         var user = UserRepository.Get()
@@ -74,6 +94,20 @@ public class UserService
         
         if(await CheckAccount(email, password))
             return await GenerateToken(user!, true);
+        throw new Exception();
+    }
+    public User LoginUsernameSync(string username, string password)
+    {
+        var user = UserRepository.Get()
+            .FirstOrDefault(
+                x => x.Username.Equals(
+                    username
+                )
+            );
+        
+        if(CheckAccountSync(user.Email, password))
+            return user;
+        
         throw new Exception();
     }
 

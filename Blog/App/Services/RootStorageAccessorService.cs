@@ -13,6 +13,9 @@ public class RootStorageAccessorService
 
     public string GetFullPath(string path)
     {
+        if (path == null)
+            path = "";
+        
         string combined = "";
         if (path.StartsWith(ContentRoot.TrimEnd('/').TrimEnd('\\')))
             combined = path;
@@ -46,5 +49,22 @@ public class RootStorageAccessorService
         var path = GetFullPath(fileName);
         var exits = File.Exists(path);
         return exits;
+    }
+
+    public bool DirExists(string dirName)
+    {
+        var path = GetFullPath(dirName);
+        var exits = Directory.Exists(path);
+        return exits;
+    }
+
+    public void Delete(string fileName)
+    {
+        File.Delete(GetFullPath(fileName));
+    }
+
+    public void DirDelete(string dirName)
+    {
+        Directory.Delete(GetFullPath(dirName));
     }
 }

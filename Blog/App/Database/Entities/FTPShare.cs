@@ -1,4 +1,6 @@
-﻿namespace Blog.App.Database.Entities;
+﻿using Blog.App.Models.FTP;
+
+namespace Blog.App.Database.Entities;
 
 public class FTPShare
 {
@@ -7,5 +9,5 @@ public class FTPShare
     public User User { get; set; }
     public string Path { get; set; }
     
-    public FTPSharePermission Permission { get; set; }
+    public FTPPermission Permission { get; set; }
 }

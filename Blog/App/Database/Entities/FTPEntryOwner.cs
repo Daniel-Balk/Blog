@@ -6,6 +6,5 @@ public class FTPEntryOwner
     
     public User User { get; set; }
     public string Path { get; set; }
-    
-    public FTPEntryType Type { get; set; }
+    public int UserId { get; set; }
 }
