@@ -38,6 +38,8 @@ public class DataContext : DbContext
                     builder.EnableRetryOnFailure(5);
                 }
             );
+
+            Database.EnsureCreated();
         }
     }
 }
