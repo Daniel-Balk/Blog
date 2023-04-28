@@ -150,10 +150,10 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
             catch(Exception ex)
             {
                 Console.WriteLine("--------------------------------------------------------");
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString());
                 port++;
             }
-        } while (port != startPort);
+        } while (true);
 
         throw new Exception("There are no ports available");
     }
