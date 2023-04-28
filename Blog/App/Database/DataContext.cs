@@ -39,11 +39,5 @@ public class DataContext : DbContext
                 }
             );
         }
-
-        Task.Run(async () =>
-        {
-            await Task.Delay(10000);
-            Database.EnsureCreated();
-        });
     }
 }
