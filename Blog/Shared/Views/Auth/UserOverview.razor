@@ -10,6 +10,7 @@
 @inject UserService UserService
 @inject CookieService CookieService
 @inject NavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContextAccessor
 
 @if (User != null)
 {
@@ -35,6 +36,15 @@
             <label for="fc3">Benutzername</label>
         </div>
         <br />
+        <OnlyAuthor>
+            <h1>Autoren</h1>
+            <p class="mt-0">
+                Autoren können ihre Artikel über FTP hochladen. Das Passwort ist dasselb wie das Passwort des Accounts. <br />
+                <a href="ftp://@User.Username@@@(HttpContextAccessor.HttpContext.Request.Headers["Host"].ToString().Split(":").FirstOrDefault()):2021/">
+                    <button class="btn btn-primary text-uppercase">FTP öffnen</button>
+                </a>
+            </p>
+        </OnlyAuthor>
         <h1>Abmelden</h1>
         <button class="btn btn-danger text-uppercase" @onclick="Logout">Abmelden</button>
     </ContentPage>
