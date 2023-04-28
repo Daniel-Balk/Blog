@@ -132,8 +132,8 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
             }
         }
 
-        int port = lastUsedPort + 1;
-        int startPort = lastUsedPort + 1;
+        int port = new Random().Next(MinPort, MaxPort);
+        int startPort = MinPort - 1;
         do
         {
             if (port > MaxPort)
