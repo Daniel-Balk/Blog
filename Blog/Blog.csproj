@@ -48,4 +48,10 @@
     <None Remove="resource\**" />
   </ItemGroup>
 
+  <!--<ItemGroup>
+    <Reference Include="Zhaobang.FtpServer">
+      <HintPath>..\FtpServer-master\Library\bin\Release\net5.0\publish\Zhaobang.FtpServer.dll</HintPath>
+    </Reference>
+  </ItemGroup>-->
+
 </Project>

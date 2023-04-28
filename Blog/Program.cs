@@ -42,6 +42,7 @@ services.AddScoped<IpTrackingService>();
 services.AddScoped<AuthenticatorService>();
 services.AddScoped<FileProviderService>();
 services.AddScoped<FTPPermissionManagerService>();
+services.AddScoped<FixedLocalDataConnectionFactory>();
 
 services.AddSingleton<FTPServerService>();
 services.AddSingleton<FileProviderFactoryService>();

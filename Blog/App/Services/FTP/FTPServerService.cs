@@ -17,12 +17,14 @@ public class FTPServerService
 
     public async Task FtpServerMain()
     {
-        var endPoint = new IPEndPoint(IPAddress.Any, 2021);
-
         var scope = ServiceScopeFactory.CreateScope();
 
+        var config = scope.ServiceProvider.GetService<ConfigService>();
+        
+        var endPoint = new IPEndPoint(IPAddress.Any, config!.Get().FTP.Port);
+
         var fileProviderFactory = scope.ServiceProvider.GetService<FileProviderFactoryService>();
-        var dataConnectionFactory = new LocalDataConnectionFactory();
+        var dataConnectionFactory = scope.ServiceProvider.GetService<FixedLocalDataConnectionFactory>();
         var authenticator = scope.ServiceProvider.GetService<AuthenticatorService>();
 
         var server = new FtpServer(endPoint, fileProviderFactory, dataConnectionFactory, authenticator);
