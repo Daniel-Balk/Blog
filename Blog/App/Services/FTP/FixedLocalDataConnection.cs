@@ -125,7 +125,7 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
             try
             {
                 tcpListener.Start();
-                return new IPEndPoint(listeningIP, listeningPort);
+                return new IPEndPoint(IPAddress.Any, listeningPort);
             }
             catch
             {
@@ -141,8 +141,9 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
                 port = MinPort;
             try
             {
+                Console.WriteLine($"Testing {port}");
                 listeningPort = port;
-                var listeningEP = new IPEndPoint(listeningIP, listeningPort);
+                var listeningEP = new IPEndPoint(IPAddress.Any, listeningPort);
                 tcpListener = new TcpListener(listeningEP);
                 tcpListener.Start();
                 lastUsedPort = port;
@@ -153,6 +154,7 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
                 port++;
             }
         } while (port != startPort);
+        Console.WriteLine("\"There are no ports available\"");
 
         throw new Exception("There are no ports available");
     }
