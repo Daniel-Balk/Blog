@@ -12,5 +12,5 @@ public class FixedLocalDataConnectionFactory : IDataConnectionFactory
         ConfigService = configService;
     }
     
-    public IDataConnection GetDataConnection(IPAddress localIP) => (IDataConnection) new LocalDataConnection(IPAddress.Parse(ConfigService.Get().FTP.IP));
+    public IDataConnection GetDataConnection(IPAddress localIP) => new FixedLocalDataConnection(IPAddress.Parse(ConfigService.Get().FTP.IP));
 }
