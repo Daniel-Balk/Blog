@@ -141,14 +141,16 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
             try
             {
                 listeningPort = port;
-                var listeningEP = new IPEndPoint(listeningIP, listeningPort);
-                tcpListener = new TcpListener(new IPEndPoint(IPAddress.Any, listeningPort));
+                var listeningEP = new IPEndPoint(IPAddress.Any, listeningPort);
+                tcpListener = new TcpListener(IPAddress.Any, port);
                 tcpListener.Start();
                 lastUsedPort = port;
                 return listeningEP;
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine("--------------------------------------------------------");
+                Console.WriteLine(ex);
                 port++;
             }
         } while (port != startPort);
