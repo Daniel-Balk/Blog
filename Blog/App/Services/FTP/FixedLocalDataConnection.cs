@@ -6,8 +6,8 @@ namespace Blog.App.Services.FTP;
 
 public class FixedLocalDataConnection : IDisposable, IDataConnection
 {
-    private const int MinPort = 10240;
-    private const int MaxPort = 10243;
+    private const int MinPort = 1024;
+    private const int MaxPort = 65000;
     private static int lastUsedPort = new Random().Next(MinPort, MaxPort);
 
     private readonly IPAddress listeningIP;
