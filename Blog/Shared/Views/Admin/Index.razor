@@ -55,6 +55,15 @@
                                 {
                                     <button class="btn btn-outline-danger text-uppercase" @onclick="() => ToggleAdmin(user)">Zu Admin machen</button>
                                 }
+                                
+                                @if (user.IsAuthor)
+                                {
+                                    <button class="btn btn-outline-warning text-uppercase" @onclick="() => ToggleAuthor(user)">Autorenstatus entfernen</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-outline-success text-uppercase" @onclick="() => ToggleAuthor(user)">Zu Autor machen</button>
+                                }
 
                                 <button class="btn btn-outline-danger text-uppercase" @onclick="() => DeleteUser(user)">Löschen</button>
                             }
@@ -83,6 +92,12 @@
     public async Task ToggleAdmin(User user)
     {
         user.IsAdmin = !user.IsAdmin;
+        UserRepository.Update(user);
+    }
+
+    public async Task ToggleAuthor(User user)
+    {
+        user.IsAuthor = !user.IsAuthor;
         UserRepository.Update(user);
     }
 
