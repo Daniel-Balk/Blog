@@ -142,7 +142,7 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
             {
                 listeningPort = port;
                 var listeningEP = new IPEndPoint(listeningIP, listeningPort);
-                tcpListener = new TcpListener(listeningEP);
+                tcpListener = new TcpListener(new IPEndPoint(IPAddress.Any, listeningPort));
                 tcpListener.Start();
                 lastUsedPort = port;
                 return listeningEP;
