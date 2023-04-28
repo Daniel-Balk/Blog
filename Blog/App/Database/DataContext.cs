@@ -38,8 +38,12 @@ public class DataContext : DbContext
                     builder.EnableRetryOnFailure(5);
                 }
             );
-
-            Database.EnsureCreated();
         }
+
+        Task.Run(async () =>
+        {
+            await Task.Delay(10000);
+            Database.EnsureCreated();
+        });
     }
 }
