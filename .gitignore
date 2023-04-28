@@ -399,3 +399,4 @@ FodyWeavers.xsd
 
 # Custom ignoring
 resource/
+FtpServer-master/
