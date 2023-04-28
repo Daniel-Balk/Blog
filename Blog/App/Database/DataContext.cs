@@ -15,6 +15,8 @@ public class DataContext : DbContext
     
     public DbSet<User> Users { get; set; }
     public DbSet<Comment> Comments { get; set; }
+    public DbSet<FTPEntryOwner> FTPFileOwners { get; set; }
+    public DbSet<FTPShare> FtpShares { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
