@@ -31,6 +31,7 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
     public FixedLocalDataConnection(IPAddress localIP)
     {
         listeningIP = localIP;
+        Console.WriteLine("Using fix");
     }
 
     /// <summary>
@@ -132,8 +133,8 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
             }
         }
 
-        int port = new Random().Next(MinPort, MaxPort);
-        int startPort = MinPort - 1;
+        int port = lastUsedPort + 1;
+        int startPort = lastUsedPort + 1;
         do
         {
             if (port > MaxPort)
@@ -141,19 +142,17 @@ public class FixedLocalDataConnection : IDisposable, IDataConnection
             try
             {
                 listeningPort = port;
-                var listeningEP = new IPEndPoint(IPAddress.Any, listeningPort);
-                tcpListener = new TcpListener(IPAddress.Any, port);
+                var listeningEP = new IPEndPoint(listeningIP, listeningPort);
+                tcpListener = new TcpListener(listeningEP);
                 tcpListener.Start();
                 lastUsedPort = port;
                 return listeningEP;
             }
-            catch(Exception ex)
+            catch
             {
-                Console.WriteLine("--------------------------------------------------------");
-                Console.WriteLine(ex.ToString());
                 port++;
             }
-        } while (true);
+        } while (port != startPort);
 
         throw new Exception("There are no ports available");
     }
