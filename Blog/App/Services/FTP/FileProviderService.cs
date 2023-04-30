@@ -24,7 +24,7 @@ public class FileProviderService : IFileProvider
         var path = WorkingDirectory + partialPath;
 
         Directory.CreateDirectory(RootStorageAccessorService.GetFullPath(path));
-        FtpPermissionManagerService.EnsureOwner(User!, path);
+        FtpPermissionManagerService.EnsureOwner(User!, path + "/");
     }
 
     public async Task<Stream> CreateFileForWriteAsync(string partialPath)
