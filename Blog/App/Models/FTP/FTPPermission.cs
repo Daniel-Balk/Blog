@@ -9,4 +9,5 @@ public enum FTPPermission
     ListDirectories = 0b000010,
     Move = 0b000001,
     All = Read | Write | Delete | ListFiles | ListDirectories | Move,
+    UseDir = Read | Write | ListFiles | ListDirectories
 }

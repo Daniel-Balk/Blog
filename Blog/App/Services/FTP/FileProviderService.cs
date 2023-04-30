@@ -22,7 +22,6 @@ public class FileProviderService : IFileProvider
     public async Task CreateDirectoryAsync(string partialPath)
     {
         var path = WorkingDirectory + partialPath;
-        FtpPermissionManagerService.ForcePermission(User!, path, FTPPermission.Write);
 
         Directory.CreateDirectory(RootStorageAccessorService.GetFullPath(path));
         FtpPermissionManagerService.EnsureOwner(User!, path);
@@ -31,7 +30,9 @@ public class FileProviderService : IFileProvider
     public async Task<Stream> CreateFileForWriteAsync(string partialPath)
     {
         var path = WorkingDirectory + partialPath;
-        FtpPermissionManagerService.ForcePermission(User!, path, FTPPermission.Write);
+
+        if (RootStorageAccessorService.Exists(partialPath))
+            FtpPermissionManagerService.ForcePermission(User!, path, FTPPermission.Write);
 
         FtpPermissionManagerService.EnsureOwner(User!, path);
         return File.OpenWrite(RootStorageAccessorService.GetFullPath(path));
@@ -55,7 +56,8 @@ public class FileProviderService : IFileProvider
     {
         var path = WorkingDirectory + partialPath;
         
-        FtpPermissionManagerService.ForcePermission(User!, path, FTPPermission.Read);
+        FtpPermissionManagerService.ForcePermission(User!, path, FTPPermission.ListDirectories);
+        FtpPermissionManagerService.ForcePermission(User!, path, FTPPermission.ListFiles);
         var list = new List<FileSystemEntry>();
 
         var dirs = RootStorageAccessorService.GetDirectories(path);
@@ -139,7 +141,9 @@ public class FileProviderService : IFileProvider
     public async Task<Stream> OpenFileForWriteAsync(string partialPath)
     {
         var path = WorkingDirectory + partialPath;
-        FtpPermissionManagerService.ForcePermission(User!, path, FTPPermission.Write);
+
+        if (RootStorageAccessorService.Exists(partialPath))
+            FtpPermissionManagerService.ForcePermission(User!, path, FTPPermission.Write);
 
         FtpPermissionManagerService.EnsureOwner(User!, path);
         return File.OpenWrite(RootStorageAccessorService.GetFullPath(path));
