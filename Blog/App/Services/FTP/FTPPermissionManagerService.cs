@@ -92,6 +92,7 @@ public class FTPPermissionManagerService
         {
             try
             {
+                Console.WriteLine("Adding Permission for " + user.Id);
                 var v = FtpOwnerEntryRepository.Add(new FTPEntryOwner()
                 {
                     Path = path,
@@ -100,7 +101,7 @@ public class FTPPermissionManagerService
             }
             catch (Exception ex)
             {
-                
+                Console.WriteLine(ex.ToString());
             }
         }
     }
