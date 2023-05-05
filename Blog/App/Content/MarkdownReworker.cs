@@ -41,7 +41,7 @@ public class MarkdownReworker
     {
         var text = Markdown.ToPlainText(markdown);
 
-        var words = text.Split(new[] {' ', ',', '.', ';', '!', '?', '/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
+        var words = text.Split(new[] {' ', ',', '.', ';', '!', ':', '?', '/', '\\', '(', ')', '=', '>', '<', '[', ']', '{', '}'}, StringSplitOptions.RemoveEmptyEntries);
 
         return words.Length;
     }
