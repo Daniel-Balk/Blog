@@ -9,13 +9,15 @@ public class PostAccessService
 {
     private readonly RootStorageAccessorService RootStorageAccessorService;
     private readonly AuthorAccessService AuthorAccessService;
+    private readonly ConfigService ConfigService;
 
     private static List<Post>? Posts = null;
     
-    public PostAccessService(RootStorageAccessorService rootStorageAccessorService, AuthorAccessService authorAccessService)
+    public PostAccessService(RootStorageAccessorService rootStorageAccessorService, AuthorAccessService authorAccessService, ConfigService configService)
     {
         RootStorageAccessorService = rootStorageAccessorService;
         AuthorAccessService = authorAccessService;
+        ConfigService = configService;
     }
 
     public void Flush()
@@ -49,7 +51,7 @@ public class PostAccessService
                         var meta = YmlConvert.Deserialize<PostMetaModel>(configuration);
                         var titleImageUrl = CompleteUrl("/resources/" + categoryId + "/" + meta.Id + "/" + meta.Icon);
 
-                        var post = new Post(AuthorAccessService, RootStorageAccessorService)
+                        var post = new Post(AuthorAccessService, RootStorageAccessorService, ConfigService)
                         {
                             Author = meta.Author,
                             Description = meta.Description,

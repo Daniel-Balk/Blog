@@ -7,4 +7,5 @@ public class BlogSettings
     public string JwtSecret { get; set; } = "";
     public ResourcesConfiguration Resources { get; set; } = new();
     public FTPConfiguration FTP { get; set; } = new();
+    public int ReadingWPM { get; set; } = 200;
 }
