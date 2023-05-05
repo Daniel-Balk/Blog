@@ -36,6 +36,9 @@
                             <a href="@($"/author/{Author.Id}")">@Author.Name</a>
                             am @Post.Date
                         </span>
+                        <span class="meta">
+                            Lesezeit: @Post.GetReadingTime()min
+                        </span>
                     </div>
                 </div>
             </div>

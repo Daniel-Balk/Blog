@@ -36,4 +36,13 @@ public class MarkdownReworker
 
         return result;
     }
+
+    public int GetWordCount(string markdown)
+    {
+        var text = Markdown.ToPlainText(markdown);
+
+        var words = text.Split(new[] {' ', ',', '.', ';', '!', '?', '/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
+
+        return words.Length;
+    }
 }
