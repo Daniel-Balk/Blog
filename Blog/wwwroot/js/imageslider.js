@@ -26,7 +26,11 @@
         </table>
     </div>
     <div class="w-100" style="scroll-behavior: smooth; overflow-x: scroll" id="slider{sliderId}-images">
+        <table class="mb-2">
+            <tr id="slider{sliderId}-tr">
         
+            </tr>
+        </table>
     </div>
 </slider-ui>
 `.replaceAll("{sliderId}", sliderId) + slider.innerHTML;
@@ -46,7 +50,7 @@
                 let fileName = entry.getAttribute("file")
                 entryfiles.push({entryId: entryId, fileName: fileName})
                 
-                entryview.innerHTML += `<img class="img-thumbnail mb-1 me-1" style="height: 75px; user-select: text;" entryid="{entryId}" onclick="imageslider.setImage({sliderId}, {entryId})" src="{fileName}" />`.replaceAll("{fileName}",fileName).replaceAll("{sliderId}", sliderId).replaceAll("{entryId}", entryId)
+                entryview.innerHTML += `<td><img class="img-thumbnail mb-1 me-1" style="height: 75px; user-select: text;" entryid="{entryId}" onclick="imageslider.setImage({sliderId}, {entryId})" src="{fileName}" /></td>`.replaceAll("{fileName}",fileName).replaceAll("{sliderId}", sliderId).replaceAll("{entryId}", entryId)
             }
             
             imageslider.sliders["slider" + sliderId] = entryfiles
