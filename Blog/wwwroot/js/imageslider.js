@@ -35,7 +35,7 @@
 </slider-ui>
 `.replaceAll("{sliderId}", sliderId) + slider.innerHTML;
             
-            let entryview = document.getElementById("slider" + sliderId + "-images")
+            let entryview = document.getElementById("slider" + sliderId + "-tr")
             let imageview = document.getElementById("slider" + sliderId + "-image")
             let entryfiles = []
             
