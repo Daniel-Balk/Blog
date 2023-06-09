@@ -26,7 +26,7 @@
         </table>
     </div>
     <div class="w-100" style="scroll-behavior: smooth; overflow-x: scroll" id="slider{sliderId}-images">
-        <table class="mb-2">
+        <table class="mb-2" style="width: max-content">
             <tr id="slider{sliderId}-tr">
         
             </tr>
