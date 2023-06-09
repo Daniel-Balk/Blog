@@ -79,7 +79,7 @@
             
             if(image.getAttribute("entryid") == entryId) {
                 image.style.borderColor = "gray"
-                entryview.scrollLeft = image.offsetLeft
+                entryview.scrollLeft = image.parentElement.offsetLeft
             }
             else {
                 image.style.borderColor = ""
