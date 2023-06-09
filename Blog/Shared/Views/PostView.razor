@@ -285,6 +285,7 @@ else
         if (firstRender)
         {
             await JsRuntime.InvokeVoidAsync("Prism.highlightAll");
+	        await JsRuntime.InvokeVoidAsync("imageslider.init");
         }
     }
 	

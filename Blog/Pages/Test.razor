@@ -1,0 +1,19 @@
+﻿@page "/Test"
+@inject IJSRuntime JsRuntime
+
+<ContentPage>
+    <image-slider>
+        <entry file="js/1.png" />
+        <entry file="js/2.png" />
+        <entry file="js/3.png" />
+        <entry file="js/4.png" />
+    </image-slider>
+</ContentPage>
+
+@code{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await JsRuntime.InvokeVoidAsync("imageslider.init");
+    }
+}
