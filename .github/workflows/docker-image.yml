@@ -14,6 +14,6 @@ jobs:
       - name: Build Image
         uses: actions/checkout@v3
       - run: docker build . -t dalkyt-blog-autobuild:latest --file Blog/Dockerfile
-      - run: docker tag dalkyt-blog-autobuild:latest docker.endelon-hosting.de:443/dalkyt-blog-autobuild:latest
-      - run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PW }} docker.endelon-hosting.de
-      - run: docker push docker.endelon-hosting.de:443/dalkyt-blog-autobuild:latest
+      - run: docker tag dalkyt-blog-autobuild:latest docker.daniel-balk.de:443/dalkyt-blog-autobuild:latest
+      - run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PW }} docker.daniel-balk.de
+      - run: docker push docker.daniel-balk.de:443/dalkyt-blog-autobuild:latest
