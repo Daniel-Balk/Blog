@@ -16,4 +16,4 @@ jobs:
       - run: docker build . -t dalkyt-blog-autobuild:latest --file Blog/Dockerfile
       - run: docker tag dalkyt-blog-autobuild:latest docker.daniel-balk.de:443/dalkyt-blog-autobuild:latest
       - run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PW }} docker.daniel-balk.de:443
-      - run: docker push-u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PW }} docker.daniel-balk.de:443/dalkyt-blog-autobuild:latest
+      - run: docker push -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PW }} docker.daniel-balk.de:443/dalkyt-blog-autobuild:latest
